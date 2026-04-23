@@ -127,11 +127,11 @@ def fetch_market_price(ticker):
 
 # --- UI COMPONENTS ---
 class InsightCard(ft.Container):
-    def __init__(self, title, content, icon="info", color=ft.colors.BLUE_GREY_900):
+    def __init__(self, title, content, icon="info", color="bluegrey900"):
         super().__init__()
         self.content = ft.Column([
-            ft.Row([ft.Icon(icon, size=20, color=ft.colors.BLUE_400), ft.Text(title, size=15, weight=ft.FontWeight.BOLD)]),
-            ft.Divider(height=1, color=ft.colors.WHITE24),
+            ft.Row([ft.Icon(icon, size=20, color="blue400"), ft.Text(title, size=15, weight="bold")]),
+            ft.Divider(height=1, color="white24"),
             content,
         ], spacing=10)
         self.padding = 20
@@ -141,34 +141,34 @@ class InsightCard(ft.Container):
 
 def main(page: ft.Page):
     page.title = "Personal Insight Weather Hub"
-    page.theme_mode = ft.ThemeMode.DARK
+    page.theme_mode = "dark"
     page.bgcolor = "#000000"  # AMOLED Black
     page.padding = 20
 
     # UI State
-    weather_text = ft.Text("---", size=24, weight=ft.FontWeight.W_300)
-    market_text = ft.Text("브렌트유 $-- | 천연가스 $--", size=16, color=ft.colors.WHITE70)
-    ai_text = ft.Text(AI_SUMMARY, size=14, italic=True, color=ft.colors.CYAN_200)
+    weather_text = ft.Text("---", size=24, weight="w300")
+    market_text = ft.Text("브렌트유 $-- | 천연가스 $--", size=16, color="white70")
+    ai_text = ft.Text(AI_SUMMARY, size=14, italic=True, color="cyan200")
     
     # Lifestyle Indicators
     wash_idx = ft.Text("세차: --", size=14)
     vent_idx = ft.Text("환기: --", size=14)
     laundry_idx = ft.Text("세탁: --", size=14)
-    clothing_txt = ft.Text("추천 착장: --", size=14, weight=ft.FontWeight.BOLD)
+    clothing_txt = ft.Text("추천 착장: --", size=14, weight="bold")
 
     # Geolocator setup (using built-in control)
     gl = ft.Geolocator()
     page.overlay.append(gl)
 
     # Forecast / Outlook Items
-    forecast_row = ft.Row(scroll=ft.ScrollMode.ADAPTIVE, spacing=15)
-    month_outlook_txt = ft.Text("전망: 이번 달 하순에는 일교차가 클 것으로 예상됩니다.", size=13, color=ft.colors.WHITE70)
+    forecast_row = ft.Row(scroll="adaptive", spacing=15)
+    month_outlook_txt = ft.Text("전망: 이번 달 하순에는 일교차가 클 것으로 예상됩니다.", size=13, color="white70")
 
     update_button = ft.ElevatedButton(
         "인사이트 업데이트",
         style=ft.ButtonStyle(
-            color=ft.colors.WHITE,
-            bgcolor=ft.colors.BLUE_800,
+            color="white",
+            bgcolor="blue800",
             padding=20,
             shape=ft.RoundedRectangleBorder(radius=10)
         ),
@@ -250,8 +250,8 @@ def main(page: ft.Page):
                                     ft.Text(f"+{i}일", size=10),
                                     ft.Icon("cloudy_snowing", size=15),
                                     ft.Text(f"{temp_val-i}°", size=12, weight="bold"),
-                                ], horizontal_alignment=ft.CrossAxisAlignment.CENTER),
-                                padding=10, bgcolor=ft.colors.WHITE10, border_radius=10
+                                ], horizontal_alignment="center"),
+                                padding=10, bgcolor="white10", border_radius=10
                             )
                         )
                 except:
@@ -277,8 +277,8 @@ def main(page: ft.Page):
 
     # Layout
     header = ft.Column([
-        ft.Text(datetime.datetime.now().strftime("%Y년 %m월 %d일 (%a)"), size=14, color=ft.colors.WHITE54),
-        ft.Text("Personal Insight Hub", size=24, weight=ft.FontWeight.BOLD),
+        ft.Text(datetime.datetime.now().strftime("%Y년 %m월 %d일 (%a)"), size=14, color="white54"),
+        ft.Text("Personal Insight Hub", size=24, weight="bold"),
     ])
 
     dashboard = ft.Column([
@@ -290,8 +290,8 @@ def main(page: ft.Page):
             content=ai_text,
             padding=15,
             border_radius=15,
-            bgcolor=ft.colors.with_opacity(0.1, ft.colors.CYAN_700),
-            border=ft.border.all(1, ft.colors.CYAN_900),
+            bgcolor="cyan700",
+            border=ft.border.all(1, "cyan900"),
         ),
         
         ft.Divider(height=10, color=ft.colors.TRANSPARENT),
@@ -299,7 +299,7 @@ def main(page: ft.Page):
         # Weather Card
         InsightCard("날씨 & 7일 예보", ft.Column([
             weather_text,
-            ft.Text("향후 7일 추이", size=12, color=ft.colors.WHITE54),
+            ft.Text("향후 7일 추이", size=12, color="white54"),
             forecast_row
         ]), icon="wb_sunny_outlined"),
 
@@ -311,16 +311,16 @@ def main(page: ft.Page):
         
         # Lifestyle Card
         InsightCard("생활 지수 & 착장 추천", ft.Column([
-            ft.Row([wash_idx, vent_idx, laundry_idx], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+            ft.Row([wash_idx, vent_idx, laundry_idx], alignment="spaceBetween"),
             clothing_txt
         ]), icon="checkroom"),
         
-        ft.Divider(height=20, color=ft.colors.TRANSPARENT),
+        ft.Divider(height=20, color="transparent"),
         
         update_button,
         
-        ft.Text("미니멀리즘 디자인 | Built with Flet", size=10, color=ft.colors.WHITE10, text_align=ft.TextAlign.CENTER, width=float("inf"))
-    ], scroll=ft.ScrollMode.ADAPTIVE, expand=True)
+        ft.Text("미니멀리즘 디자인 | Built with Flet", size=10, color="white10", text_align="center", width=float("inf"))
+    ], scroll="adaptive", expand=True)
 
     page.add(dashboard)
 
