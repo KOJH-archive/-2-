@@ -127,7 +127,7 @@ def fetch_market_price(ticker):
 
 # --- UI COMPONENTS ---
 class InsightCard(ft.Container):
-    def __init__(self, title, content, icon=ft.icons.INFO_OUTLINE, color=ft.colors.BLUE_GREY_900):
+    def __init__(self, title, content, icon=ft.icons.INFO, color=ft.colors.BLUE_GREY_900):
         super().__init__()
         self.content = ft.Column([
             ft.Row([ft.Icon(icon, size=20, color=ft.colors.BLUE_400), ft.Text(title, size=15, weight=ft.FontWeight.BOLD)]),
@@ -301,10 +301,10 @@ def main(page: ft.Page):
             weather_text,
             ft.Text("향후 7일 추이", size=12, color=ft.colors.WHITE54),
             forecast_row
-        ]), icon=ft.icons.WBM_SUNNY_OUTLINED),
+        ]), icon=ft.icons.WB_SUNNY_OUTLINED),
 
         # Long-term Outlook
-        InsightCard("중장기 예보 (상/중/하순)", ft.Column([month_outlook_txt]), icon=ft.icons.CALENDAR_MONTH_OUTLINED),
+        InsightCard("중장기 예보 (상/중/하순)", ft.Column([month_outlook_txt]), icon=ft.icons.CALENDAR_MONTH),
         
         # Market Card
         InsightCard("원자재 시장 지표", ft.Column([market_text,]), icon=ft.icons.SHOW_CHART),
@@ -313,7 +313,7 @@ def main(page: ft.Page):
         InsightCard("생활 지수 & 착장 추천", ft.Column([
             ft.Row([wash_idx, vent_idx, laundry_idx], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
             clothing_txt
-        ]), icon=ft.icons.CHECKROOM_OUTLINED),
+        ]), icon=ft.icons.CHECKROOM),
         
         ft.Divider(height=20, color=ft.colors.TRANSPARENT),
         
