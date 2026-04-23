@@ -156,9 +156,13 @@ def main(page: ft.Page):
     laundry_idx = ft.Text("세탁: --", size=14)
     clothing_txt = ft.Text("추천 착장: --", size=14, weight="bold")
 
-    # Geolocator setup (using built-in control)
-    gl = ft.Geolocator()
-    page.overlay.append(gl)
+    # Geolocator setup (safely handle if missing in old Flet versions)
+    gl = None
+    try:
+        gl = ft.Geolocator()
+        page.overlay.append(gl)
+    except AttributeError:
+        print("Geolocator not supported in this Flet version. Using manual/fallback mode.")
 
     # Forecast / Outlook Items
     forecast_row = ft.Row(scroll="adaptive", spacing=15)
@@ -182,17 +186,19 @@ def main(page: ft.Page):
 
         try:
             # Check for permissions (handles Windows/Mac/Linux gracefully)
-            ps = await gl.get_permission_status()
-            if ps != ft.geolocator.PermissionStatus.GRANTED:
-                ps = await gl.request_permission()
-            
-            if ps == ft.geolocator.PermissionStatus.GRANTED:
-                pos = await gl.get_current_position()
-                lat, lon = pos.latitude, pos.longitude
+            if gl:
+                ps = await gl.get_permission_status()
+                if ps != "granted": # Use string to avoid PermissionStatus issues
+                    ps = await gl.request_permission()
+                
+                if ps == "granted":
+                    pos = await gl.get_current_position()
+                    lat, lon = pos.latitude, pos.longitude
+                else:
+                    lat, lon = 37.5665, 126.9780
             else:
-                # Fallback to Seoul if permission denied or unavailable on desktop
                 lat, lon = 37.5665, 126.9780
-                print("Using fallback location (Seoul)")
+                print("Geolocator unavailable, using fallback (Seoul)")
         except Exception as e:
             print(f"Location error: {e}. Falling back to Seoul.")
             lat, lon = 37.5665, 126.9780
