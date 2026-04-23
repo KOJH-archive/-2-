@@ -180,13 +180,22 @@ def main(page: ft.Page):
         update_button.text = "업데이트 중..."
         page.update()
 
-        ps = await gl.get_permission_status()
-        if ps != ft.geolocator.PermissionStatus.GRANTED:
-            ps = await gl.request_permission()
-        
-        if ps == ft.geolocator.PermissionStatus.GRANTED:
-            pos = await gl.get_current_position()
-            lat, lon = pos.latitude, pos.longitude
+        try:
+            # Check for permissions (handles Windows/Mac/Linux gracefully)
+            ps = await gl.get_permission_status()
+            if ps != ft.geolocator.PermissionStatus.GRANTED:
+                ps = await gl.request_permission()
+            
+            if ps == ft.geolocator.PermissionStatus.GRANTED:
+                pos = await gl.get_current_position()
+                lat, lon = pos.latitude, pos.longitude
+            else:
+                # Fallback to Seoul if permission denied or unavailable on desktop
+                lat, lon = 37.5665, 126.9780
+                print("Using fallback location (Seoul)")
+        except Exception as e:
+            print(f"Location error: {e}. Falling back to Seoul.")
+            lat, lon = 37.5665, 126.9780
             
             # KMA Grid Conversion
             nx, ny = dfs_xy_conv(lat, lon)
