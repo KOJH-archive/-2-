@@ -12,5 +12,6 @@ path = "src"
 
 [tool.flet.android]
 product = "Weather Hub"
-org = "com.user"
+org = "com.weatherhub"
 permissions = ["location"]
+source_packages = ["watchdog"]

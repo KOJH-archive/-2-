@@ -29,11 +29,19 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+
+    - name: Accept Android Licenses
+      run: yes | flutter doctor --android-licenses
+
     - name: Build APK with Flet
       env:
         FLET_CLI_NO_RICH_OUTPUT: 1
       run: |
-        # Use --yes to automatically accept Flutter SDK installation in CI
+        # Build using the pre-installed Flutter SDK
         flet build apk --yes --verbose
 
     - name: Upload APK artifact
