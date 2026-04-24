@@ -30,9 +30,11 @@ jobs:
         java-version: '17'
 
     - name: Build APK with Flet
+      env:
+        FLET_CLI_NO_RICH_OUTPUT: 1
       run: |
-        # Flet build now uses pyproject.toml for most configurations
-        flet build apk --verbose
+        # Use --yes to automatically accept Flutter SDK installation in CI
+        flet build apk --yes --verbose
 
     - name: Upload APK artifact
       if: success()
