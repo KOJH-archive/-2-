@@ -5,7 +5,6 @@ description = "Personal Insight Weather Hub"
 dependencies = [
     "flet==0.24.0",
     "requests",
-    "uvicorn==0.34.0",
 ]
 
 [tool.flet.app]
@@ -15,4 +14,3 @@ path = "src"
 product = "Weather Hub"
 org = "com.weatherhub"
 permissions = ["location"]
-source_packages = ["watchdog", "uvicorn"]
