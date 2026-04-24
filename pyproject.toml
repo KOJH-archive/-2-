@@ -1,0 +1,16 @@
+[project]
+name = "weatherhub"
+version = "0.1.0"
+description = "Personal Insight Weather Hub"
+dependencies = [
+    "flet==0.24.0",
+    "requests",
+]
+
+[tool.flet.app]
+path = "src"
+
+[tool.flet.android]
+product = "Weather Hub"
+org = "com.user"
+permissions = ["location"]

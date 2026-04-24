@@ -184,30 +184,37 @@ def main(page: ft.Page):
         update_button.text = "업데이트 중..."
         page.update()
 
+        # Initial fallback (Seoul)
+        lat, lon = 37.5665, 126.9780
+        
         try:
             # Check for permissions (handles Windows/Mac/Linux gracefully)
             if gl:
                 ps = await gl.get_permission_status()
-                if ps != "granted": # Use string to avoid PermissionStatus issues
+                if ps != "granted": 
                     ps = await gl.request_permission()
                 
                 if ps == "granted":
                     pos = await gl.get_current_position()
                     lat, lon = pos.latitude, pos.longitude
                 else:
-                    lat, lon = 37.5665, 126.9780
+                    print("Permission denied, using fallback (Seoul)")
             else:
-                lat, lon = 37.5665, 126.9780
                 print("Geolocator unavailable, using fallback (Seoul)")
-        except Exception as e:
-            print(f"Location error: {e}. Falling back to Seoul.")
-            lat, lon = 37.5665, 126.9780
-            
+        except Exception as ex:
+            print(f"Location error: {ex}. Falling back to Seoul.")
+
+        # --- DATA FETCHING (Runs regardless of location success) ---
+        try:
             # KMA Grid Conversion
             nx, ny = dfs_xy_conv(lat, lon)
 
             # Fetch KMA Weather
             w_data = fetch_kma_weather(nx, ny)
+            
+            temp = "--" # Initial value
+            pty_code = "0"
+            
             if w_data:
                 # KMA Categories: TMP(Temperature), REH(Humidity), SKY(Sky), PTY(Precip), WSD(Wind)
                 temp = w_data.get("TMP", "--")
@@ -263,7 +270,7 @@ def main(page: ft.Page):
                 except:
                     pass
             else:
-                weather_text.value = "기상청 API 키 혹은 데이터 오류"
+                weather_text.value = "기상청 데이터 로드 실패 (API 키 확인 필요)"
 
             # Fetch Market Data
             oil_p = fetch_market_price(BRENT_OIL_TICKER)
@@ -272,8 +279,10 @@ def main(page: ft.Page):
 
             # Generate AI Briefing
             ai_text.value = get_ai_briefing({"temp": temp}, {"oil": oil_p})
-        else:
-            weather_text.value = "위치 권한이 필요합니다"
+            
+        except Exception as ex:
+            print(f"Data fetching error: {ex}")
+            weather_text.value = "데이터 업데이트 중 오류 발생"
 
         update_button.disabled = False
         update_button.text = "인사이트 업데이트"
@@ -289,7 +298,7 @@ def main(page: ft.Page):
 
     dashboard = ft.Column([
         header,
-        ft.Divider(height=20, color=ft.colors.TRANSPARENT),
+        ft.Divider(height=20, color="transparent"),
         
         # AI Briefing Card
         ft.Container(
@@ -300,7 +309,7 @@ def main(page: ft.Page):
             border=ft.border.all(1, "cyan900"),
         ),
         
-        ft.Divider(height=10, color=ft.colors.TRANSPARENT),
+        ft.Divider(height=10, color="transparent"),
         
         # Weather Card
         InsightCard("날씨 & 7일 예보", ft.Column([

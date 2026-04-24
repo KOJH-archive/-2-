@@ -31,9 +31,8 @@ jobs:
 
     - name: Build APK with Flet
       run: |
-        # Build APK with location permissions
-        # --verbose helps debug any errors during the first build
-        flet build apk --permissions location --verbose
+        # Flet build now uses pyproject.toml for most configurations
+        flet build apk --verbose
 
     - name: Upload APK artifact
       if: success()
